@@ -3,7 +3,10 @@ const express = require('express')
 const fs = require('fs')
 const { v4: uuidv4 } = require('uuid')
 
-function createApp() {
+let path
+
+function createApp(customPath) {
+  path = customPath || './cycle.json'
   const app = express()
   
   app.get('/tasks', (req, res) => {
@@ -36,23 +39,23 @@ if (require.main === module) {
 }
 
 function loadTasks() {
-  const dataBuffer = fs.readFileSync('./cycle.json')
+  const dataBuffer = fs.readFileSync(path)
   if (!dataBuffer) {
-    throw new Error(`couldn't find cycle.json`)
+    throw new Error(`couldn't find ${path}`)
   }
   const data = JSON.parse(dataBuffer.toString())
   if (!data) {
-    throw new Error('failed to parse cycle.json')
+    throw new Error(`failed to parse ${path}`)
   }
   if (!data.tasks) {
     console.log(JSON.stringify(data))
-    throw new Error(`couldn't find cycle.json tasks`)
+    throw new Error(`couldn't find tasks in ${path}`)
   }
   return data.tasks
 }
 
 function saveTasks(tasks) {
-  fs.writeFileSync('./cycle.json', JSON.stringify(tasks))
+  fs.writeFileSync(path, JSON.stringify(tasks))
 }
 
 module.exports = {

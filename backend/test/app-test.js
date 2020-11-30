@@ -7,7 +7,7 @@ describe('Our server', function() {
 
   // Called once before any of the tests in this block begin.
   before(function(done) {
-    app = createApp()
+    app = createApp('./test/test-data.json')
     server = app.listen(function(err) {
       if (err) { return done(err) }
       done()
@@ -18,15 +18,18 @@ describe('Our server', function() {
     server.close()
   })
 
-  it('should send back a task', function(done) {
+  it('should send back tasks', function(done) {
     request(app)
       .get('/tasks')
       .set('Content-Type', 'application/json')
       .expect('Content-Type', /json/)
       .expect(200, function(err, res) {
-        if (err) { return done(err) }
+        if (err) {
+          console.error(res)
+          return done(err)
+        }
         expect(res.body).to.not.be.null
-        console.log(res.body)
+        expect(() => { JSON.parse(res.body) }).not.to.throw;
         // Done
         done()
       })

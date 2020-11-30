@@ -1,26 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import React, { useState } from 'react'
 
 function App() {
-  fetch('/api').then(result => result.text()).then(res => console.log(res));
+  const [tasks] = useState([])
+  fetch('/api/tasks')
+    .then(result => result.text())
+    .then(res => console.log(res))
+  const taskItems = tasks.map((_, i) => {
+    return (
+      <li>item {i}</li>
+    )
+  })
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        Items
       </header>
+      <ul>
+        {taskItems}
+      </ul>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
