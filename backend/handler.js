@@ -1,32 +1,32 @@
 const express = require('express')
 const Model = require('./model')
 
-function createApp() {
-  const app = express()
+function createHandler() {
+  const handler = express()
   const model = new Model()
   
-  app.get('/tasks', (req, res) => {
+  handler.get('/tasks', (req, res) => {
     const tasks = model.loadTasks()
     res.send(tasks)
   })
   
-  app.post('/tasks/add', (req, res) => {
+  handler.post('/tasks/add', (req, res) => {
     const task = JSON.parse(req.body)
     const result = model.addTask(task)
     res.send(result)
   })
 
-  return app
+  return handler
 }
 
 if (require.main === module) {
-  const app = createApp()
+  const handler = createHandler()
   const port = 4000
-  app.listen(port, () => {
+  handler.listen(port, () => {
     console.log(`Listening on port ${port}`)
   })
 }
 
 module.exports = {
-  createApp,
+  createHandler,
 }

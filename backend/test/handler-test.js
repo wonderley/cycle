@@ -1,14 +1,14 @@
 const request = require('supertest')
 const expect = require('chai').expect;
-const { createApp } = require('../app')
+const { createHandler } = require('../handler')
 
-describe('Our server', function() {
-  let app, server
+describe('handler', function() {
+  let handler, server
 
   // Called once before any of the tests in this block begin.
   before(function(done) {
-    app = createApp()
-    server = app.listen(function(err) {
+    handler = createHandler()
+    server = handler.listen(function(err) {
       if (err) { return done(err) }
       done()
     })
@@ -19,7 +19,7 @@ describe('Our server', function() {
   })
 
   it('should send back tasks', function(done) {
-    request(app)
+    request(handler)
       .get('/tasks')
       .set('Content-Type', 'application/json')
       .expect('Content-Type', /json/)
