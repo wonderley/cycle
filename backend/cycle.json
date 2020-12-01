@@ -11,6 +11,10 @@
     },
     {
       "desc": "finish eu backfill"
+    },
+    {
+      "desc": "enter team notes in fleet mgmt doc",
+      "when": "thursday"
     }
   ]
 }

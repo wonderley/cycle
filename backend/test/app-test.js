@@ -7,7 +7,7 @@ describe('Our server', function() {
 
   // Called once before any of the tests in this block begin.
   before(function(done) {
-    app = createApp('./test/test-data.json')
+    app = createApp()
     server = app.listen(function(err) {
       if (err) { return done(err) }
       done()
