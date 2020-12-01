@@ -1,16 +1,17 @@
 const express = require('express')
+const model = require('./model')
 
-function CreateHandler(model) {
+function CreateHandler() {
   const handler = express()
   
   handler.get('/tasks', (req, res) => {
-    const tasks = model.loadTasks()
+    const tasks = model.GetTasks()
     res.send(tasks)
   })
   
   handler.post('/tasks/add', (req, res) => {
     const task = JSON.parse(req.body)
-    const result = model.addTask(task)
+    const result = model.AddTask(task)
     res.send(result)
   })
 
