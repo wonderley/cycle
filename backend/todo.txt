@@ -1,2 +1,1 @@
-Create test suite
-Make tests for GET and POST
+Introduce stdin text interface

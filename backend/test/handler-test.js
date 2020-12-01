@@ -1,13 +1,15 @@
 const request = require('supertest')
 const expect = require('chai').expect;
-const { createHandler } = require('../handler')
+const { CreateHandler } = require('../handler')
+const Model = require('../model')
 
 describe('handler', function() {
   let handler, server
 
   // Called once before any of the tests in this block begin.
   before(function(done) {
-    handler = createHandler()
+    const model = new Model()
+    handler = CreateHandler(model)
     server = handler.listen(function(err) {
       if (err) { return done(err) }
       done()
