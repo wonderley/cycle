@@ -20,13 +20,25 @@ function Interpret(text, model=fileModel) {
     return `➕${result.id.substring(0, 4)}`
   } else if (cmd === 'fin') {
     if (!args.length) return 'specify a task to complete'
+    let task
     if (args.length === 1) {
       const possibleId = args[0]
       if (possibleId.length > 2
-       && possibleId.every(c => c.match(/[0-9a-f]/))) {
+       && possibleId.split()
+          .every(c => c.match(/[0-9a-f]/))) {
         // The argument could be the task ID
-        // const res = model.RemoveById(possibleId)
+        task = model.TaskById(possibleId)
       }
+    }
+    if (!task) {
+      // get by name
+    }
+    if (task) {
+      task.done = true
+      model.UpdateTask(task)
+      return `✅ ${task.id.substring(0, 4)} ${task.desc}`
+    } else {
+      return `unknown task ${args.join(' ')}`
     }
   } else {
     return `unknown command ${cmd}`
