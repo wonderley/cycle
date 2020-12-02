@@ -1,10 +1,17 @@
 const fs = require('fs')
 const { v4: uuidv4 } = require('uuid')
 
-const defaultPath = './data/cycle.json'
+let path = './data/cycle.json'
 
-function AddTask(task, customPath) {
-  const path = customPath || defaultPath
+function SetPath(customPath) {
+  path = customPath
+}
+
+function ResetPath() {
+  path = './data/cycle.json'
+}
+
+function AddTask(task) {
   const tasks = GetTasks(path)
   task.id = uuidv4()
   task.createdAt = Date.now()
@@ -17,7 +24,6 @@ function AddTask(task, customPath) {
 }
   
 function GetTasks(customPath) {
-  const path = customPath || defaultPath
   if (!fs.existsSync(path)) {
     fs.writeFileSync(path, '[]')
   }
@@ -37,14 +43,12 @@ function GetTasks(customPath) {
   return data.filter(t => !t.done)
 }
 
-function TaskById(id, customPath) {
-  const path = customPath || defaultPath
+function TaskById(id) {
   const tasks = GetTasks(path)
   return tasks.find(t => t.id.startsWith(id))
 }
 
-function UpdateTask(task, customPath) {
-  const path = customPath || defaultPath
+function UpdateTask(task) {
   const tasks = GetTasks()
   const idx = tasks.findIndex(t => t.id === task.id)
   if (idx === -1)
@@ -62,4 +66,6 @@ module.exports = {
   AddTask,
   TaskById,
   UpdateTask,
+  SetPath,
+  ResetPath,
 }

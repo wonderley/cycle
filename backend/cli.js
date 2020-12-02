@@ -1,13 +1,13 @@
 const model = require('./model/file-model')
 
-function Interpret(text, customPath) {
+function Interpret(text) {
   if (!text) return
   splitText = text.split(' ')
   if (!splitText.length) return
   const cmd  = splitText[0],
         args = splitText.splice(1)
   if (cmd === 'list') {
-    const tasks = model.GetTasks(customPath)
+    const tasks = model.GetTasks()
     return tasks.map(t =>
       `${t.id.substring(0, 4)} ${t.desc}`
     ).join('\n')
@@ -16,7 +16,7 @@ function Interpret(text, customPath) {
     const task = {
       desc: args.join(' '),
     }
-    const result = model.AddTask(task, customPath)
+    const result = model.AddTask(task)
     return `➕${result.id.substring(0, 4)}`
   } else if (cmd === 'fin') {
     if (!args.length) return 'specify a task to complete'
@@ -35,7 +35,7 @@ function Interpret(text, customPath) {
     }
     if (task) {
       task.done = true
-      model.UpdateTask(task, customPath)
+      model.UpdateTask(task)
       return `✅ ${task.id.substring(0, 4)} ${task.desc}`
     } else {
       return `unknown task ${args.join(' ')}`
