@@ -1,6 +1,7 @@
-const model = require('./model')
+const fileModel = require('./model/file-model')
 
-function Interpret(text) {
+function Interpret(text, model=fileModel) {
+  if (!text) return
   splitText = text.split(' ')
   if (!splitText.length) return
   const cmd  = splitText[0],
@@ -15,6 +16,18 @@ function Interpret(text) {
     }
     const result = model.AddTask(task)
     return `added task: ${JSON.stringify(result)}`
+  } else if (cmd === 'done') {
+    if (!args.length) return 'specify a task to complete'
+    if (args.length === 1) {
+      const possibleId = args[0]
+      if (possibleId.length > 2
+       && possibleId.every(c => c.match(/[0-9a-f]/))) {
+        // The argument could be the task ID
+        // const res = model.removeById(possibleId)
+      }
+    }
+  } else {
+    return `unknown command ${cmd}`
   }
 }
 

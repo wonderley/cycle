@@ -1,9 +1,9 @@
 const express = require('express')
-const model = require('./model')
+const model = require('./model/file-model')
 
 function CreateHandler() {
   const handler = express()
-  
+
   handler.get('/tasks', (req, res) => {
     const tasks = model.GetTasks()
     res.send(tasks)

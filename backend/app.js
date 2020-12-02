@@ -1,5 +1,5 @@
 const cli = require('./cli')
-const model = require('./model')
+const model = require('./model/file-model')
 const { CreateHandler } = require('./handler')
 const readline = require('readline')
 
@@ -8,7 +8,7 @@ if (require.main === module) {
 }
 
 function main() {
-  const handler = CreateHandler()
+  const handler = CreateHandler(model)
   const port = 4000
   handler.listen(port, () => {
     console.log(`Listening on port ${port}`)
