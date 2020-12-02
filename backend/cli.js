@@ -1,4 +1,5 @@
 const model = require('./model/file-model')
+const { TaskToString } = require('./task')
 
 function Interpret(text) {
   if (!text) return
@@ -8,16 +9,14 @@ function Interpret(text) {
         args = splitText.splice(1)
   if (cmd === 'list') {
     const tasks = model.GetTasks()
-    return tasks.map(t =>
-      `${t.id.substring(0, 4)} ${t.desc}`
-    ).join('\n')
+    return tasks.map(TaskToString).join('\n')
   } else if (cmd === 'add') {
     if (!args.length) return 'nothing to add'
     const task = {
       desc: args.join(' '),
     }
     const result = model.AddTask(task)
-    return `➕${result.id.substring(0, 4)}`
+    return `➕${TaskToString(result)}`
   } else if (cmd === 'fin') {
     if (!args.length) return 'specify a task to complete'
     let task
@@ -36,7 +35,7 @@ function Interpret(text) {
     if (task) {
       task.done = true
       model.UpdateTask(task)
-      return `✅ ${task.id.substring(0, 4)} ${task.desc}`
+      return `✅${TaskToString(task)}`
     } else {
       return `unknown task ${args.join(' ')}`
     }

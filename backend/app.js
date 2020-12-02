@@ -3,16 +3,12 @@ const model = require('./model/file-model')
 const { CreateHandler } = require('./handler')
 const readline = require('readline')
 
-if (require.main === module) {
-  main()
-}
-
-function main() {
-  const handler = CreateHandler(model)
-  const port = 4000
-  handler.listen(port, () => {
-    console.log(`Listening on port ${port}`)
-  })
+function Main() {
+  // const handler = CreateHandler(model)
+  // const port = 4000
+  // handler.listen(port, () => {
+  //   console.log(`Listening on port ${port}`)
+  // })
 
   // stdin
   var rl = readline.createInterface({
@@ -25,4 +21,8 @@ function main() {
     const out = cli.Interpret(line)
     out && console.log(out)
   })
+}
+
+module.exports = {
+  Main,
 }

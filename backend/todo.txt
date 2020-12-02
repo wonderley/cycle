@@ -1,1 +1,2 @@
-Introduce stdin text interface
+Allow non-interactive calls to cli
+Add bin/
