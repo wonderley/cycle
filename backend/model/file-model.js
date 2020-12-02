@@ -1,24 +1,29 @@
 const fs = require('fs')
 const { v4: uuidv4 } = require('uuid')
 
-const path = './data/cycle.json'
+const defaultPath = './data/cycle.json'
 
-function AddTask(task) {
+function AddTask(task, customPath) {
+  const path = customPath || defaultPath
+  const tasks = GetTasks(path)
   task.id = uuidv4()
   task.createdAt = Date.now()
-  const tasks = GetTasks()
   if (tasks.find(t => t.id === task.id)) {
     throw new Error('failed to create task due to ID collision')
   }
   tasks.push(task)
-  saveTasks(tasks)
+  saveTasks(tasks, path)
   return task
 }
   
-function GetTasks(filterDone=true) {
+function GetTasks(customPath) {
+  const path = customPath || defaultPath
+  if (!fs.existsSync(path)) {
+    fs.writeFileSync(path, '[]')
+  }
   const dataBuffer = fs.readFileSync(path)
   if (!dataBuffer) {
-    throw new Error(`couldn't find ${path}`)
+    throw new Error(`couldn't open ${path}`)
   }
   const data = JSON.parse(dataBuffer.toString())
   if (!data) {
@@ -29,27 +34,26 @@ function GetTasks(filterDone=true) {
     throw new Error(`couldn't find tasks in ${path}`)
   }
   let tasks = data
-  if (filterDone) {
-    tasks = data.filter(t => !t.done)
-  }
-  return tasks
+  return data.filter(t => !t.done)
 }
 
-function TaskById(id) {
-  const tasks = GetTasks()
+function TaskById(id, customPath) {
+  const path = customPath || defaultPath
+  const tasks = GetTasks(path)
   return tasks.find(t => t.id.startsWith(id))
 }
 
-function UpdateTask(task) {
+function UpdateTask(task, customPath) {
+  const path = customPath || defaultPath
   const tasks = GetTasks()
   const idx = tasks.findIndex(t => t.id === task.id)
   if (idx === -1)
     throw new Error(`couldn't find task with id ${task.id}`)
   tasks[idx] = task
-  saveTasks(tasks)
+  saveTasks(tasks, path)
 }
   
-function saveTasks(tasks) {
+function saveTasks(tasks, path) {
   fs.writeFileSync(path, JSON.stringify(tasks, null, 2))
 }
 
