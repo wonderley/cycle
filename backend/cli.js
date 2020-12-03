@@ -1,5 +1,5 @@
 const model = require('./model/file-model')
-const { TaskToString } = require('./task')
+const { FormattedTime, TaskToString } = require('./task')
 
 function Interpret(text) {
   if (!text) return
@@ -36,9 +36,11 @@ function Interpret(text) {
     } else {
       return `specify a task to schedule`
     }
-    task.when = Date.now() // get date from otherArgs
-    const result = model.UpdateTask(task)
-    return `scheduled ${TaskToString(result)} for ${result.when}`
+    // schedule for an hour from now
+    // todo: get date from otherArgs
+    task.when = Date.now() + 3600
+    model.UpdateTask(task)
+    return `scheduled ${TaskToString(task)} for ${FormattedTime(task.when)}`
   } else {
     return `unknown command ${cmd}`
   }

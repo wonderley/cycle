@@ -5,6 +5,11 @@ function TaskToString(task) {
   return `${shortId.yellow} ${task.desc}`
 }
 
+function FormattedTime(time) {
+  return new Date(time).toLocaleDateString("en-US")
+}
+
 module.exports = {
+  FormattedTime,
   TaskToString,
 }
