@@ -5,9 +5,9 @@ function Interpret(text) {
   if (!text) return
   splitText = text.split(' ')
   if (!splitText.length) return
-  const cmd  = splitText[0],
-        args = splitText.splice(1)
-  if (cmd === 'list') {
+  const cmd  = splitText[0].toLowerCase(),
+        args = splitText.slice(1)
+  if (cmd === 'ls' || 'list'.startsWith(cmd)) {
     const tasks = model.GetTasks()
     return tasks.map(TaskToString).join('\n')
   } else if (cmd === 'add') {
@@ -17,21 +17,9 @@ function Interpret(text) {
     }
     const result = model.AddTask(task)
     return `➕${TaskToString(result)}`
-  } else if (cmd === 'fin') {
+  } else if ('finish'.startsWith(cmd) || 'complete'.startsWith(cmd)) {
     if (!args.length) return 'specify a task to complete'
-    let task
-    if (args.length === 1) {
-      const possibleId = args[0]
-      if (possibleId.length > 2
-       && possibleId.split()
-          .every(c => c.match(/[0-9a-f]/))) {
-        // The argument could be the task ID
-        task = model.TaskById(possibleId)
-      }
-    }
-    if (!task) {
-      // get by name
-    }
+    const task = model.TaskById(args[0])
     if (task) {
       task.done = true
       model.UpdateTask(task)
@@ -39,6 +27,18 @@ function Interpret(text) {
     } else {
       return `unknown task ${args.join(' ')}`
     }
+  } else if ('schedule'.startsWith(cmd)) {
+    let task, otherArgs
+    if (task = model.TaskById(args[0])) { 
+      otherArgs = args.slice(1)
+    } else if (task = model.TaskById(args[args.length-1])) {
+      otherArgs = args.slice(0,-1)
+    } else {
+      return `specify a task to schedule`
+    }
+    task.when = Date.now() // get date from otherArgs
+    const result = model.UpdateTask(task)
+    return `scheduled ${TaskToString(result)} for ${result.when}`
   } else {
     return `unknown command ${cmd}`
   }

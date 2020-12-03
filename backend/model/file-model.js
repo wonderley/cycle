@@ -44,6 +44,11 @@ function GetTasks(customPath) {
 }
 
 function TaskById(id) {
+  if (id.length <= 1
+    || !id.split()
+        .every(c => c.match(/[0-9a-f]/))) {
+    return undefined
+  }
   const tasks = GetTasks(path)
   return tasks.find(t => t.id.startsWith(id))
 }

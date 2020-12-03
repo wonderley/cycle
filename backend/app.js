@@ -4,23 +4,31 @@ const { CreateHandler } = require('./handler')
 const readline = require('readline')
 
 function Main() {
-  // const handler = CreateHandler(model)
-  // const port = 4000
-  // handler.listen(port, () => {
-  //   console.log(`Listening on port ${port}`)
-  // })
+  const runServer = false
+  if (runServer) {
+    const handler = CreateHandler(model)
+    const port = 4000
+    handler.listen(port, () => {
+      console.log(`Listening on port ${port}`)
+    })
+  }
+  if (process.argv.length > 2) {
+    handleLine(process.argv.slice(2).join())
+  } else {
+    // stdin
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+      terminal: false,
+    })
 
-  // stdin
-  var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    terminal: false,
-  })
-  
-  rl.on('line', (line) => {
-    const out = cli.Interpret(line)
-    out && console.log(out)
-  })
+    rl.on('line', handleLine)
+  }
+}
+
+function handleLine(line) {
+  const out = cli.Interpret(line)
+  out && console.log(out)
 }
 
 module.exports = {
