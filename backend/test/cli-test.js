@@ -1,5 +1,4 @@
 const expect = require('chai').expect
-const assert = require('chai').assert
 const cli = require('../cli')
 const fs = require('fs')
 const model = require('../model/file-model')
@@ -12,6 +11,7 @@ describe('cli', () => {
     if (fs.existsSync(testPath)) {
       fs.unlinkSync(testPath)
     }
+    cli.SetColorEnabled(false)
   })
 
   afterEach(() => {
@@ -19,6 +19,7 @@ describe('cli', () => {
     if (fs.existsSync(testPath)) {
       fs.unlinkSync(testPath)
     }
+    cli.SetColorEnabled(true)
   })
 
   it('returns nothing for empty input', () => {
@@ -35,9 +36,9 @@ describe('cli', () => {
     model.AddTask({ desc: 'task 3'})
     const res = cli.Interpret('list')
     const lines = res.split('\n')
-    assert.equal(lines.length, 3)
-    assert(lines[0].match(/[0-9a-f]{4} task 1/))
-    assert(lines[1].match(/[0-9a-f]{4} task 2/))
-    assert(lines[2].match(/[0-9a-f]{4} task 3/))
+    expect(lines.length).to.equal(3)
+    expect(lines[0].match(/[0-9a-f]{4} task 1/)).to.not.be.null
+    expect(lines[1].match(/[0-9a-f]{4} task 2/)).to.not.be.null
+    expect(lines[2].match(/[0-9a-f]{4} task 3/)).to.not.be.null
   })
 })

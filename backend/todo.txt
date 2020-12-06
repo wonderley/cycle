@@ -1,2 +1,19 @@
-Allow non-interactive calls to cli
-Add bin/
+Add "edit" command that lets you specify a field to edit
+Make "reschedule" an alias for "edit date"
+
+Add "undo" capability 😲
+
+Hashtags
+
+Prioirity levels
+
+Notes
+
+Schedulers
+
+Track focus time
+
+Suggest or schedule breaks
+
+Mindfulness program on breaks
+  With or without sound

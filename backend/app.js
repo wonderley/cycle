@@ -13,7 +13,7 @@ function Main() {
     })
   }
   if (process.argv.length > 2) {
-    handleLine(process.argv.slice(2).join())
+    handleLine(process.argv.slice(2).join(' '))
   } else {
     // stdin
     const rl = readline.createInterface({

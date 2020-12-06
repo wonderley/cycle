@@ -1,14 +1,15 @@
 const fs = require('fs')
 const { v4: uuidv4 } = require('uuid')
 
-let path = './data/cycle.json'
+const DEFAULT_PATH = './data/cycle.json'
+let path = DEFAULT_PATH
 
 function SetPath(customPath) {
   path = customPath
 }
 
 function ResetPath() {
-  path = './data/cycle.json'
+  path = DEFAULT_PATH
 }
 
 function AddTask(task) {
@@ -23,7 +24,7 @@ function AddTask(task) {
   return task
 }
   
-function GetTasks(customPath) {
+function GetTasks() {
   if (!fs.existsSync(path)) {
     fs.writeFileSync(path, '[]')
   }

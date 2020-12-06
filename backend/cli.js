@@ -1,7 +1,16 @@
 const model = require('./model/file-model')
 const { FormattedTime, TaskToString } = require('./task')
 
+let colorEnabled = true
+
 function Interpret(text) {
+  const out = interpret(text)
+  if (!out || colorEnabled) return out
+  // Remove ANSI CSI sequence
+  return out.replace(/\x1b\[[0-9;]*m/g, '')
+}
+
+function interpret(text) {
   if (!text) return
   splitText = text.split(' ')
   if (!splitText.length) return
@@ -17,7 +26,7 @@ function Interpret(text) {
     }
     const result = model.AddTask(task)
     return `➕${TaskToString(result)}`
-  } else if ('finish'.startsWith(cmd) || 'complete'.startsWith(cmd)) {
+  } else if ('finish'.startsWith(cmd) || 'complete'.startsWith(cmd) || 'done'.startsWith(cmd)) {
     if (!args.length) return 'specify a task to complete'
     const task = model.TaskById(args[0])
     if (task) {
@@ -46,6 +55,11 @@ function Interpret(text) {
   }
 }
 
+function SetColorEnabled(enabled) {
+  colorEnabled = enabled
+}
+
 module.exports = {
   Interpret,
+  SetColorEnabled,
 }
