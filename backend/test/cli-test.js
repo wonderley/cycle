@@ -2,6 +2,7 @@ const expect = require('chai').expect
 const cli = require('../cli')
 const fs = require('fs')
 const model = require('../model/file-model')
+const colors = require('colors')
 
 describe('cli', () => {
   const testPath = './data/test.json'
@@ -11,7 +12,7 @@ describe('cli', () => {
     if (fs.existsSync(testPath)) {
       fs.unlinkSync(testPath)
     }
-    cli.SetColorEnabled(false)
+    colors.disable()
   })
 
   afterEach(() => {
@@ -19,7 +20,7 @@ describe('cli', () => {
     if (fs.existsSync(testPath)) {
       fs.unlinkSync(testPath)
     }
-    cli.SetColorEnabled(true)
+    colors.enable()
   })
 
   it('returns nothing for empty input', () => {

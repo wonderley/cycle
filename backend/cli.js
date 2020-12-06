@@ -1,16 +1,7 @@
 const model = require('./model/file-model')
 const { FormattedTime, TaskToString } = require('./task')
 
-let colorEnabled = true
-
 function Interpret(text) {
-  const out = interpret(text)
-  if (!out || colorEnabled) return out
-  // Remove ANSI CSI sequence
-  return out.replace(/\x1b\[[0-9;]*m/g, '')
-}
-
-function interpret(text) {
   if (!text) return
   splitText = text.split(' ')
   if (!splitText.length) return
@@ -55,11 +46,6 @@ function interpret(text) {
   }
 }
 
-function SetColorEnabled(enabled) {
-  colorEnabled = enabled
-}
-
 module.exports = {
   Interpret,
-  SetColorEnabled,
 }
